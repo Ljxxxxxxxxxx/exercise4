@@ -93,7 +93,6 @@ def find_book_by_id():
 def find_book_reservation_status():
     input_text = input('Enter the book ID, title, user ID, or reservation ID: ')
 
-    # Determine the type of input (BookID, UserID, ReservationID, or Title)
     if input_text.startswith('LB'):
         book_id = input_text[2:]
     elif input_text.startswith('LU'):
@@ -103,7 +102,6 @@ def find_book_reservation_status():
     else:
         book_title = input_text
 
-    # Find the book's reservation status
     if book_id is not None:
         cur.execute('SELECT * FROM Reservations WHERE BookID = ?', (book_id,))
     elif user_id is not None:
@@ -155,7 +153,6 @@ def modify_book_details():
     print('ISBN:', book[3])
     print('Status:', book[4])
 
-    # Update the book's details
     title = input('Enter the new title: ')
     author = input('Enter the new author: ')
     isbn = input('Enter the new ISBN: ')
@@ -182,14 +179,12 @@ def delete_book():
     print('ISBN:', book[3])
     print('Status:', book[4])
 
-    # Check if the book is reserved
     cur.execute('SELECT * FROM Reservations WHERE BookID = ?', (book_id,))
     reservation = cur.fetchone()
 
     if reservation is not None:
         print('Book is reserved!')
-
-        # If the user wants to delete the reserved book, then the reservation should be cancelled
+        
         if input('Do you want to cancel the reservation and delete the book? (y/n): ') == 'y':
             cur.execute('DELETE FROM Reservations WHERE BookID = ?', (book_id,))
             conn.commit()
@@ -201,7 +196,6 @@ def delete_book():
         else:
             return
 
-    # Delete the book
     cur.execute('DELETE FROM Books WHERE BookID = ?', (book_id,))
     conn.commit()
 
@@ -210,10 +204,8 @@ def delete_book():
 def exit():
     print('Thank you for using the library management system!')
 
-    # Close the database connection
     conn.close()
 
-    # Exit the program
     sys.exit()
 
 if __name__ == '__main__':
